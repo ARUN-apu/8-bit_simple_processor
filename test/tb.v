@@ -52,14 +52,7 @@ module tb ();
     rst_n = 1'b1; // Release reset
     
     // Monitor processor execution for several clock cycles
-    repeat(20) begin
-      @(posedge clk);
-      #1; // Small delay for signal settling
-      $display("%0t\t|   %b   | %3d |   %3d   |    %8b |   %2b   |   %2b   |    %b", 
-               $time, ~rst_n, uio_out, uo_out, 
-               user_project.processor.data, user_project.processor.opcode, 
-               user_project.processor.alu_op, user_project.processor.reg_write);
-    end
+
     
     // Test reset functionality
     $display("\n--- Testing Reset ---");
@@ -67,15 +60,7 @@ module tb ();
     #10;
     rst_n = 1'b1;
     
-    repeat(5) begin
-      @(posedge clk);
-      #1;
-      $display("%0t\t|   %b   | %3d |   %3d   |    %8b |   %2b   |   %2b   |    %b", 
-               $time, ~rst_n, uio_out, uo_out, 
-               user_project.processor.data, user_project.processor.opcode, 
-               user_project.processor.alu_op, user_project.processor.reg_write);
-    end
-    
+  
     $display("\n--- Test Complete ---");
     #10000 $finish;
   end
@@ -90,33 +75,8 @@ module tb ();
                user_project.processor.rf.registers[i]);
     end
     
-    // Monitor register changes during execution
-    $display("\n--- Monitoring Register Changes ---");
-    forever begin
-      @(posedge user_project.processor.reg_write);
-      @(posedge clk);
-      #1;
-      $display("Register[%0d] updated to %8b (%3d) at time %0t", 
-               user_project.processor.rd, 
-               user_project.processor.rf.registers[user_project.processor.rd],
-               user_project.processor.rf.registers[user_project.processor.rd],
-               $time);
-    end
+   
   end
 
   // Additional monitoring for debugging
-  initial begin
-    #30; // Start after reset
-    $display("\n--- Detailed Execution Trace ---");
-
-    repeat(15) begin
-      @(posedge clk);
-      #1;
-      $display("  %2d  |%3d | %8b| %2b |%2d  |%2d  |%2d  |  %3d    |   %3d   |    %3d", 
-               (uio_out + 1), uio_out, user_project.processor.data, user_project.processor.opcode,
-               user_project.processor.rs, user_project.processor.rt, user_project.processor.rd,
-               user_project.processor.rs_data, user_project.processor.rt_data, uo_out);
-    end
-  end
-
 endmodule
