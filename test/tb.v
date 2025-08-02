@@ -63,20 +63,7 @@ module tb ();
   
     $display("\n--- Test Complete ---");
     #10000 $finish;
-  end
-
-  // Monitor register file changes
-  initial begin
-    $display("\n--- Register File Initial Values ---");
-    #25; // Wait for reset to complete
-    for (integer i = 0; i < 8; i = i + 1) begin
-      $display("Register[%0d] = %8b (%3d)", i, 
-               user_project.processor.rf.registers[i], 
-               user_project.processor.rf.registers[i]);
-    end
-    
-   
-  end
+  end  
 
   // Additional monitoring for debugging
 endmodule
