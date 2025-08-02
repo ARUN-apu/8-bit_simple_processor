@@ -9,7 +9,6 @@ module tb ();
   initial begin
     $dumpfile("tb.vcd");
     $dumpvars(0, tb);
-    #1;
   end
 
   // Wire up the inputs and outputs:
@@ -48,10 +47,6 @@ module tb ();
     ena = 1'b1;
     rst_n = 1'b0;
     
-    // Print header
-    $display("Time\t| Reset | PC  | ALU_Out | Instruction | Opcode | ALU_Op | Reg_Write");
-    $display("--------|-------|-----|---------|-------------|--------|--------|----------");
-    
     // Hold reset for a few clock cycles
     #20;
     rst_n = 1'b1; // Release reset
@@ -82,7 +77,7 @@ module tb ();
     end
     
     $display("\n--- Test Complete ---");
-    $finish;
+    #10000 $finish;
   end
 
   // Monitor register file changes
@@ -113,9 +108,7 @@ module tb ();
   initial begin
     #30; // Start after reset
     $display("\n--- Detailed Execution Trace ---");
-    $display("Cycle | PC | Instr | Op | RS | RT | RD | RS_Data | RT_Data | ALU_Result");
-    $display("------|----|----- -|----|----|----|----| --------|---------|----------");
-    
+
     repeat(15) begin
       @(posedge clk);
       #1;
