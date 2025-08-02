@@ -55,7 +55,7 @@ async def test_project(dut):
     # Execute and verify each instruction
     for i, expected_instr in enumerate(expected_instructions):
         pc = int(dut.uio_out.value)
-        alu_result = int(dut.uo_out.value)
+        alu_result = dut.uo_out.value
         
         dut._log.info(f"Cycle {i}: PC={pc}, ALU_Result={alu_result}")
         
@@ -138,7 +138,7 @@ async def test_io_functionality(dut):
     assert uio_oe == 0xFF, f"Expected uio_oe=0xFF, got {uio_oe:02x}"
     
     # Test that outputs are changing (processor is running)
-    initial_alu = int(dut.uo_out.value)
+    initial_alu = dut.uo_out.value
     initial_pc = int(dut.uio_out.value)
     
     await ClockCycles(dut.clk, 5)
